@@ -21,9 +21,14 @@ class Colors:
 
 def ask_env_name():
     name = input(f"{Colors.QUESTION}Enter the name of environment: {Colors.ENDC}")
+    envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
     while True:
         if name == 'b':
             return False
+        elif name in envs:
+            print(f"{Colors.WARNING}'{name}' env is already exists!{Colors.ENDC}")
+            name = input(f"{Colors.QUESTION}Enter the name of environment: {Colors.ENDC}")
+            continue
         elif name.find('/') == -1 and name.find(' ') == -1 and name.find(':') == -1 and\
                 name.find('#') == -1:
             return name
@@ -94,6 +99,7 @@ for path in stream.read().split('\n'):
         print(f"{Colors.OKCYAN}{anaconda_path}{Colors.ENDC}")
         break
     else:
+
         sys.exit(f"{Colors.WARNING}Anaconda is not found in your system{Colors.ENDC}")
 
 
@@ -134,7 +140,9 @@ while True:
         os.system('pause')
 
     elif option_list[int(response) - 1] == "Take back-up as text file":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
+        # if anaconda_path is not defined then program will stop running according to the else condition in the line
+        # anaconda_manager.py:103
+        envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")
         [print(f"{Colors.OKCYAN}{i + 1}) {env}{Colors.ENDC}") for i, env in enumerate(envs)]
@@ -167,14 +175,14 @@ while True:
         path = '\\'.join(requirement_path.split('\\')[:-1])
         file_name = requirement_path.split('\\')[-1]
         print(f"""{Colors.MESSAGE}\n{'-' * len(f"Creating {env_name} env using {file_name} file")}
-        Creating {env_name} env using {file_name} file{Colors.ENDC}""")
+Creating {env_name} env using {file_name} file{Colors.ENDC}""")
         os.system(f"""cd "{path}" & conda create --name {env_name} --file {file_name}""")
         os.system(f"cd {os.path.expanduser('~')}")
         print(f"{Colors.MESSAGE}{env_name} env created!{Colors.ENDC}")
         os.system('pause')
 
     elif option_list[int(response) - 1] == "Install packages into existing environment using text file":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
+        envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")
@@ -249,7 +257,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         os.system('pause')
 
     elif option_list[int(response) - 1] == "Clone an environment":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
+        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")
@@ -270,7 +278,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         os.system('pause')
 
     elif option_list[int(response) - 1] == "List all packages":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
+        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")
@@ -285,7 +293,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         os.system('pause')
 
     elif option_list[int(response) - 1] == "List the history of each change to a environment":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
+        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")
@@ -300,7 +308,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         os.system('pause')
 
     elif option_list[int(response) - 1] == "Restore environment to a previous revision":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
+        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")
@@ -324,11 +332,11 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
 
         os.system(f"conda activate {env_name} & conda install --revision {version}")
         os.system("conda deactivate")
-        print(f"""{Colors.MESSAGE}{'-'*len(f"Version {version} is restored of {env_name}")}Version {version} is restored of {env_name}{Colors.ENDC}""")
+        print(f"""{Colors.MESSAGE}{'-'*len(f"Version {version} is restored of {env_name}")}\nVersion {version} is restored of {env_name}{Colors.ENDC}""")
         os.system('pause')
 
     elif option_list[int(response) - 1] == "List of environments":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
+        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")

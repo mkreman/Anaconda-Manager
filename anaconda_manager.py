@@ -99,7 +99,6 @@ for path in stream.read().split('\n'):
         print(f"{Colors.OKCYAN}{anaconda_path}{Colors.ENDC}")
         break
     else:
-
         sys.exit(f"{Colors.WARNING}Anaconda is not found in your system{Colors.ENDC}")
 
 
@@ -141,7 +140,7 @@ while True:
 
     elif option_list[int(response) - 1] == "Take back-up as text file":
         # if anaconda_path is not defined then program will stop running according to the else condition in the line
-        # anaconda_manager.py:103
+        # anaconda_manager.py:102
         envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")

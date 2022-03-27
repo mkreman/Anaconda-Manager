@@ -1,1 +1,0 @@
-wt cmd /k python "C:\Users\MkReman\My Drive\Projects\Anaconda-Manager\anaconda_manager.py"

@@ -219,8 +219,8 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
             continue
         env_name = envs[int(env_index) - 1].split()[0]
         print(f"""{Colors.WARNING}{"-" * len(f"{env_index}th environment {env_name} is selected")}
-{env_index}th environment {env_name} is selected{Colors.ENDC}""")
-        conformation = input(f"{Colors.WARNING}Are you sure, you want to remove {env_name} env [y/n]: {Colors.ENDC}")
+{env_index}th environment '{env_name}' is selected{Colors.ENDC}""")
+        conformation = input(f"{Colors.WARNING}Are you sure, you want to remove '{env_name}' env [y/n]: {Colors.ENDC}")
         while True:
             if conformation.lower() in ['y', 'yes']:
                 print(f"""{Colors.MESSAGE}\n{'-' * len(f'Removing env {env_name}')}\nRemoving env {env_name}{Colors.ENDC}""")
@@ -335,7 +335,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         os.system('pause')
 
     elif option_list[int(response) - 1] == "List of environments":
-        envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
+        envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")

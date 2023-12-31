@@ -1,2 +1,2 @@
 # Anaconda-Manager
-Script to manage anaconda environment
+Script to manage anaconda environments

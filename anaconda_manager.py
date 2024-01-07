@@ -93,7 +93,7 @@ Welcome to Anaconda Manager Application-2.0!
 
 stream = os.popen("where python")
 for path in stream.read().split('\n'):
-    if path[-20:] == 'anaconda3\\python.exe':
+    if path[-20:] == 'anaconda3\\python.exe' or path[-21:] == 'miniconda3\\python.exe':
         anaconda_path = path[:-10]
         print(f"""{Colors.MESSAGE}Your Anaconda is located at the following path{Colors.ENDC}""")
         print(f"{Colors.OKCYAN}{anaconda_path}{Colors.ENDC}")

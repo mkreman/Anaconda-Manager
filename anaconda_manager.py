@@ -158,7 +158,7 @@ while True:
             continue
 
         print(f"{Colors.MESSAGE}Storing packages of {env_name}'s environment in the directory: {path}{Colors.ENDC}")
-        os.system(f"""conda activate {env_name} & cd "{path}" & conda list --explicit > {env_name + '_requirement.txt'}""")
+        os.system(f"""conda activate {env_name} & cd "{path}" & conda env export --no-builds > {env_name + '_requirement.yml'}""")
         print(f"{Colors.MESSAGE}{env_name + '_requirement.txt'} is exported to {path}{Colors.ENDC}")
         os.system('pause')
 

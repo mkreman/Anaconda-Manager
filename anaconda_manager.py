@@ -114,7 +114,7 @@ option_list = [
     "Rename the environment",
     "Clone an environment",
     "List all packages",
-    "List the history of each change to a environment",
+    "List all revision of a environment/History of a environment",
     "Restore environment to a previous revision",
     "List of environments",
     "Close"]
@@ -173,9 +173,14 @@ while True:
 
         path = '\\'.join(requirement_path.split('\\')[:-1])
         file_name = requirement_path.split('\\')[-1]
+        if file_name.split('.')[-1] != 'yml':
+            print(f"""{Colors.WARNING}\n{'-' * len(f"Requirement file should be a 'yml' file")}
+Requirement file should be a 'yml' file{Colors.ENDC}""")
+            continue
+
         print(f"""{Colors.MESSAGE}\n{'-' * len(f"Creating {env_name} env using {file_name} file")}
 Creating {env_name} env using {file_name} file{Colors.ENDC}""")
-        os.system(f"""cd "{path}" & conda create --name {env_name} --file {file_name}""")
+        os.system(f"""cd "{path}" & conda env create --name {env_name} --file {file_name}""")
         os.system(f"cd {os.path.expanduser('~')}")
         print(f"{Colors.MESSAGE}{env_name} env created!{Colors.ENDC}")
         os.system('pause')
@@ -291,7 +296,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         os.system(f"conda list -n {env_name}")
         os.system('pause')
 
-    elif option_list[int(response) - 1] == "List the history of each change to a environment":
+    elif option_list[int(response) - 1] == "List all revision of a environment/History of a environment":
         envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings

@@ -1,120 +1,35 @@
 import os
 import sys
+from utils import *
+import platform
+
+if platform.system() == 'Windows':
+    os.system('title Anaconda Manager')
+    os.system('cls')
+    os.system('conda deactivate')
+elif platform.system() == 'Linux':
+    os.system('clear')
 
 
-os.system('title Anaconda Manager')
-os.system('cls')
-os.system('conda deactivate')
-
-
-class Colors:
-    HEADER = '\033[95m'
-    MESSAGE = '\033[94m'
-    OKCYAN = '\033[96m'
-    QUESTION = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
-def ask_env_name():
-    name = input(f"{Colors.QUESTION}Enter the name of environment: {Colors.ENDC}")
-    envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
-    while True:
-        if name == 'b':
-            return False
-        elif name in envs:
-            print(f"{Colors.WARNING}'{name}' env is already exists!{Colors.ENDC}")
-            name = input(f"{Colors.QUESTION}Enter the name of environment: {Colors.ENDC}")
-            continue
-        elif name.find('/') == -1 and name.find(' ') == -1 and name.find(':') == -1 and\
-                name.find('#') == -1:
-            return name
-        else:
-            print(f"{Colors.WARNING}Env name '{name}' is invalid, Characters not allowed: ('/', ' ', ':', '#')\n"
-                  f"{Colors.ENDC}")
-            name = input(f"{Colors.QUESTION}Enter the name of environment: {Colors.ENDC}")
-
-
-def ask_requirement_path():
-    text_path = input(f"{Colors.QUESTION}Enter the path where requirement text file is stored: {Colors.ENDC}")
-    while True:
-        if text_path == 'b':
-            return False
-        elif os.path.exists(text_path):
-            return text_path
-        else:
-            print(f"{Colors.WARNING}File path '{text_path}' does not exits!{Colors.ENDC}")
-            text_path = input(f"{Colors.QUESTION}Enter the path where requirement text file is stored: {Colors.ENDC}")
-
-
-def ask_env_index(length):
-    index = input(f"""\n{Colors.QUESTION}Select the Environment by typing the respective index number: {Colors.ENDC}""")
-    while True:
-        if index == 'b':
-            return False
-        elif index.isnumeric() and 0 < int(index) <= length:
-            return int(index)
-        else:
-            print(f"{Colors.WARNING}Invalid response!{Colors.ENDC}")
-            index = input(f"""\n{Colors.QUESTION}Select the Environment by typing the respective index number: {Colors.ENDC}""")
-
-
-def ask_path():
-    path = input(f"{Colors.QUESTION}Enter the path where you want to store text file: {Colors.ENDC}")
-    while True:
-        if path == 'b':
-            return False
-        elif os.path.exists(path):
-            return path
-        else:
-            print(f"{Colors.WARNING}Path '{path}' does not exits!{Colors.ENDC}")
-            path = input(f"{Colors.QUESTION}Enter the path where you want to store text file: {Colors.ENDC}")
-
-
-def ask_response(length):
-    response = input(f"{Colors.QUESTION}Select the index of the operation: {Colors.ENDC}")
-    while True:
-        if response == 'b':
-            return False
-        elif not response.isnumeric() or int(response) > length or int(response) < 1:
-            print(f"{Colors.WARNING}Invalid Response!")
-            response = input(f"{Colors.QUESTION}Select the index of the operation: {Colors.ENDC}")
-        else:
-            return response
-
-
-print(f"""{Colors.HEADER}===========================================
+print(f"""{Colors.HEADER}============================================
 Welcome to Anaconda Manager Application-2.0!
-==========================================={Colors.ENDC}
-""")
+============================================{Colors.ENDC}""")
 
-stream = os.popen("where python")
-for path in stream.read().split('\n'):
-    if path[-20:] == 'anaconda3\\python.exe' or path[-21:] == 'miniconda3\\python.exe':
-        anaconda_path = path[:-10]
-        print(f"""{Colors.MESSAGE}Your Anaconda is located at the following path{Colors.ENDC}""")
-        print(f"{Colors.OKCYAN}{anaconda_path}{Colors.ENDC}")
-        break
-    else:
-        sys.exit(f"{Colors.WARNING}Anaconda is not found in your system{Colors.ENDC}")
-
+anaconda_path = get_anaconda_path()
 
 options = f"""\n\n{Colors.MESSAGE}================================
 Select the operation from below:
 --------------------------------{Colors.ENDC}\n"""
 option_list = [
-    "Take back-up as text file",
-    "Create environment from a text file",
-    "Create a environment",
-    "Install packages into existing environment using text file",
-    "Remove env",
-    "Rename the environment",
-    "Clone an environment",
-    "List all packages",
-    "List all revision of a environment/History of a environment",
+    "Take back-up of an environment",
+    "Create environment from a back-up file",
+    "Create environment",
+    "Install packages into existing environment using a back-up file",
+    "Remove environment",
+    "Rename environment",
+    "Clone environment",
+    "List all packages in an environment",
+    "List all revision / History of an environment",
     "Restore environment to a previous revision",
     "List of environments",
     "Close"]
@@ -130,15 +45,15 @@ while True:
     if not response:
         break
 
-    elif option_list[int(response) - 1] == "Create a environment":  # 3rd Option
+    elif option_list[int(response) - 1] == "Create environment":  # 3rd Option
         env_name = ask_env_name()
         if not env_name:
             continue    # If it's 'b' then ask_env_name returns False
 
         os.system(f"conda create --name {env_name}")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "Take back-up as text file":
+    elif option_list[int(response) - 1] == "Take back-up of an evironment":
         # if anaconda_path is not defined then program will stop running according to the else condition in the line
         # anaconda_manager.py:102
         envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
@@ -150,19 +65,19 @@ while True:
         if not env_index:
             continue
         env_name = envs[int(int(env_index)) - 1].split()[0]
-        print(f"""{Colors.WARNING}{"-" * len(f"{env_index}th environment {env_name} is selected")}
-{env_index}th environment {env_name} is selected{Colors.ENDC}""")
+        print(f"""{Colors.WARNING}{"-" * len(f"Environment '{env_name}' is selected")}
+Environment '{env_name}' is selected{Colors.ENDC}""")
 
         path = ask_path()
         if not path:
             continue
 
-        print(f"{Colors.MESSAGE}Storing packages of {env_name}'s environment in the directory: {path}{Colors.ENDC}")
+        print(f"{Colors.MESSAGE}Storing packages of environment '{env_name}' in the directory: '{path}'{Colors.ENDC}")
         os.system(f"""conda activate {env_name} & cd "{path}" & conda env export --no-builds > {env_name + '_requirement.yml'}""")
         print(f"{Colors.MESSAGE}{env_name + '_requirement.txt'} is exported to {path}{Colors.ENDC}")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "Create environment from a text file":
+    elif option_list[int(response) - 1] == "Create environment from a back-up file":
         requirement_path = ask_requirement_path()
         if not requirement_path:
             continue
@@ -183,9 +98,9 @@ Creating {env_name} env using {file_name} file{Colors.ENDC}""")
         os.system(f"""cd "{path}" & conda env create --name {env_name} --file {file_name}""")
         os.system(f"cd {os.path.expanduser('~')}")
         print(f"{Colors.MESSAGE}{env_name} env created!{Colors.ENDC}")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "Install packages into existing environment using text file":
+    elif option_list[int(response) - 1] == "Install packages into existing environment using a back-up file":
         envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
@@ -196,8 +111,8 @@ Creating {env_name} env using {file_name} file{Colors.ENDC}""")
         if not env_index:
             continue
         env_name = envs[int(env_index) - 1].split()[0]
-        print(f"""{Colors.WARNING}{"-" * len(f"{env_index}th environment {env_name} is selected")}
-{env_index}th environment {env_name} is selected{Colors.ENDC}""")
+        print(f"""{Colors.WARNING}{"-" * len(f"Environment '{env_name}' is selected")}
+Environment '{env_name}' is selected{Colors.ENDC}""")
 
         requirement_path = ask_requirement_path()
         if not requirement_path:
@@ -207,12 +122,12 @@ Creating {env_name} env using {file_name} file{Colors.ENDC}""")
         file_name = requirement_path.split('\\')[-1]
         print(f"""{Colors.MESSAGE}\n{'-'*len(f"Installing packages into {env_name} env listed in {file_name} file")}
 Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}""")
-        os.system(f"""cd "{path}" & conda install --name {env_name} --file {file_name}""")
+        os.system(f"""cd "{path}" & conda env update --name {env_name} --file {file_name}""")
         os.system(f"cd {os.path.expanduser('~')}")
         print(f"{Colors.MESSAGE}Packages installed on {env_name}!{Colors.ENDC}")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "Remove env":
+    elif option_list[int(response) - 1] == "Remove environment":
         envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
@@ -223,13 +138,13 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         if not env_index:
             continue
         env_name = envs[int(env_index) - 1].split()[0]
-        print(f"""{Colors.WARNING}{"-" * len(f"{env_index}th environment {env_name} is selected")}
-{env_index}th environment '{env_name}' is selected{Colors.ENDC}""")
+        print(f"""{Colors.WARNING}{"-" * len(f"Environment '{env_name}' is selected")}
+Environment '{env_name}' is selected{Colors.ENDC}""")
         conformation = input(f"{Colors.WARNING}Are you sure, you want to remove '{env_name}' env [y/n]: {Colors.ENDC}")
         while True:
             if conformation.lower() in ['y', 'yes']:
                 print(f"""{Colors.MESSAGE}\n{'-' * len(f'Removing env {env_name}')}\nRemoving env {env_name}{Colors.ENDC}""")
-                os.system(f"conda deactivate & conda env remove --name {env_name}")
+                os.system(f"conda deactivate & conda env remove --name {env_name} -y")
                 print(f"{Colors.MESSAGE}Removed all packages in environment {env_name}:{Colors.ENDC}")
                 break
             elif conformation.lower() in ['n', 'no', 'b']:
@@ -237,9 +152,9 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
             else:
                 print(f"{Colors.WARNING}Invalid response!{Colors.ENDC}")
                 conformation = input(f"{Colors.WARNING}Are you sure, you want to remove {env_name} [y/n]: {Colors.ENDC}")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "Rename the environment":
+    elif option_list[int(response) - 1] == "Rename environment":
         envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
@@ -250,17 +165,17 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         if not env_index:
             continue
         env_name = envs[int(env_index) - 1].split()[0]
-        print(f"""{Colors.WARNING}{"-" * len(f"{env_index}th environment {env_name} is selected")}
-{env_index}th environment {env_name} is selected{Colors.ENDC}""")
+        print(f"""{Colors.WARNING}{"-" * len(f"Environment '{env_name}' is selected")}
+Environment '{env_name}' is selected{Colors.ENDC}""")
 
         new_name = ask_env_name()
         if not new_name:
             continue  # If it's 'b' then ask_env_name returns False
         os.rename(os.path.join(anaconda_path, 'envs', env_name), os.path.join(anaconda_path, 'envs', new_name))
-        print(f"{Colors.MESSAGE}Env name {env_name} is changed to {new_name}")
-        os.system('pause')
+        print(f"{Colors.MESSAGE}Environment name '{env_name}' is changed to '{new_name}'")
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "Clone an environment":
+    elif option_list[int(response) - 1] == "Clone environment":
         envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
@@ -271,17 +186,17 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         if not env_index:
             continue
         env_name = envs[env_index - 1].split()[0]
-        print(f"""{Colors.WARNING}{"-" * len(f"{env_index}th environment {env_name} is selected")}
-{env_index}th environment {env_name} is selected{Colors.ENDC}""")
+        print(f"""{Colors.WARNING}{"-" * len(f"Environment '{env_name}' is selected")}
+Environment '{env_name}' is selected{Colors.ENDC}""")
         print(f"""{Colors.QUESTION}\n-------------------------------{Colors.ENDC}""")
 
         new_env_name = ask_env_name()
         if not new_env_name:
             continue
         os.system(f"conda create --clone {env_name} --name {new_env_name}")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "List all packages":
+    elif option_list[int(response) - 1] == "List all packages in an environment":
         envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
@@ -294,9 +209,9 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         env_name = envs[env_index - 1].split()[0]
         print("\n---------------------------------------------------------------------------")
         os.system(f"conda list -n {env_name}")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "List all revision of a environment/History of a environment":
+    elif option_list[int(response) - 1] == "List all revision / History of an environment":
         envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
 
         print(f"""\n{Colors.MESSAGE}Select env from followings
@@ -309,7 +224,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         env_name = envs[env_index - 1].split()[0]
         os.system(f"conda activate {env_name} & conda list --revisions")
         os.system("conda deactivate")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
     elif option_list[int(response) - 1] == "Restore environment to a previous revision":
         envs = [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))] + ['base']
@@ -337,7 +252,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         os.system(f"conda activate {env_name} & conda install --revision {version}")
         os.system("conda deactivate")
         print(f"""{Colors.MESSAGE}{'-'*len(f"Version {version} is restored of {env_name}")}\nVersion {version} is restored of {env_name}{Colors.ENDC}""")
-        os.system('pause')
+        input('Press Enter to continue...:')
 
     elif option_list[int(response) - 1] == "List of environments":
         envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]
@@ -345,7 +260,7 @@ Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}"
         print(f"""\n{Colors.MESSAGE}Select env from followings
 --------------------------{Colors.ENDC}""")
         [print(f"{Colors.OKCYAN}{i + 1}) {env}{Colors.ENDC}") for i, env in enumerate(envs)]
-        os.system('pause')
+        input('Press Enter to continue...:')
 
     elif option_list[int(response) - 1] == "Close":
         break

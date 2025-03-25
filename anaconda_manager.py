@@ -73,9 +73,16 @@ Environment '{env_name}' is selected{Colors.ENDC}""")
             continue
 
         print(f"{Colors.MESSAGE}Storing packages of environment '{env_name}' in the directory: '{path}'{Colors.ENDC}")
-        os.system(f"""conda activate {env_name} & cd "{path}" & conda env export --no-builds > {env_name + '_requirement.yml'}""")
-        print(f"{Colors.MESSAGE}{env_name + '_requirement.txt'} is exported to {path}{Colors.ENDC}")
-        input('Press Enter to continue...:')
+
+        if platform.system() == 'Windows':
+            os.system(f"""conda activate {env_name} & cd "{path}" & conda env export --no-builds > {env_name + '_requirement.yml'}""")
+            print(f"{Colors.MESSAGE}{env_name + '_requirement.txt'} is exported to {path}{Colors.ENDC}")
+            input('Press Enter to continue...:')
+        elif platform.system() == 'Linux':
+            # os.system(f"bash -c 'source {anaconda_path}/etc/profile.d/conda.sh && conda activate {env_name} && cd {path} && conda env export --no-builds > {env_name + '_requirement.yml'}'")
+            os.system(f"""bash -c "source {anaconda_path}/etc/profile.d/conda.sh && conda activate {env_name} && cd '{path}' && conda env export --no-builds > {env_name + '_requirement.yml'}" """)
+            print(f"{Colors.MESSAGE}{env_name + '_requirement.txt'} is exported to {path}{Colors.ENDC}")
+            input('Press Enter to continue...:')
 
     elif option_list[int(response) - 1] == "Create environment from a back-up file":
         requirement_path = ask_requirement_path()

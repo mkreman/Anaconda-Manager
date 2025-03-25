@@ -53,7 +53,7 @@ while True:
         os.system(f"conda create --name {env_name}")
         input('Press Enter to continue...:')
 
-    elif option_list[int(response) - 1] == "Take back-up of an evironment":
+    elif option_list[int(response) - 1] == "Take back-up of an environment":
         # if anaconda_path is not defined then program will stop running according to the else condition in the line
         # anaconda_manager.py:102
         envs = ['base'] + [env for env in os.listdir(os.path.join(anaconda_path, 'envs')) if os.path.isdir(os.path.join(os.path.join(anaconda_path, 'envs'), env))]

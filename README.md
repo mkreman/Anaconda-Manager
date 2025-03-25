@@ -3,7 +3,7 @@
 
 ### You can do following things using this program.
 
-- Take back-up of an evironment as yaml file
+- Take back-up of an environment as yaml file
 - Create environment from a back-up yaml file
 - Create environment
 - Install packages into existing environment using a back-up file

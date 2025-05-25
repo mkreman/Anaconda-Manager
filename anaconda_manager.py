@@ -128,7 +128,7 @@ Environment '{env_name}' is selected{Colors.ENDC}""")
         file_name = requirement_path.split('\\')[-1]
         print(f"""{Colors.MESSAGE}\n{'-'*len(f"Installing packages into {env_name} env listed in {file_name} file")}
 Installing packages into {env_name} env listed in {file_name} file{Colors.ENDC}""")
-        os.system(f"""cd "{path}" & conda env update --name {env_name} --file {file_name}""")
+        os.system(f"""cd "{path}" & conda env update --name {env_name} --file '{file_name}'""")
         os.system(f"cd {os.path.expanduser('~')}")
         print(f"{Colors.MESSAGE}Packages installed on {env_name}!{Colors.ENDC}")
         input('Press Enter to continue...:')

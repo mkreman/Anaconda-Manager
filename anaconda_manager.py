@@ -79,7 +79,6 @@ Environment '{env_name}' is selected{Colors.ENDC}""")
             print(f"{Colors.MESSAGE}{env_name + '_requirement.txt'} is exported to {path}{Colors.ENDC}")
             input('Press Enter to continue...:')
         elif platform.system() == 'Linux':
-            # os.system(f"bash -c 'source {anaconda_path}/etc/profile.d/conda.sh && conda activate {env_name} && cd {path} && conda env export --no-builds > {env_name + '_requirement.yml'}'")
             os.system(f"""bash -c "source {anaconda_path}/etc/profile.d/conda.sh && conda activate {env_name} && cd '{path}' && conda env export --no-builds > {env_name + '_requirement.yml'}" """)
             print(f"{Colors.MESSAGE}{env_name + '_requirement.txt'} is exported to {path}{Colors.ENDC}")
             input('Press Enter to continue...:')
@@ -178,7 +177,9 @@ Environment '{env_name}' is selected{Colors.ENDC}""")
         new_name = ask_env_name()
         if not new_name:
             continue  # If it's 'b' then ask_env_name returns False
+        # os.system(f"conda deactivate & conda create --name {new_name} --clone {env_name} -y & conda env remove --name {env_name} --all -y")
         os.rename(os.path.join(anaconda_path, 'envs', env_name), os.path.join(anaconda_path, 'envs', new_name))
+        os.system(f"conda init & conda activate {new_name} & conda install --force-reinstall pip -y")
         print(f"{Colors.MESSAGE}Environment name '{env_name}' is changed to '{new_name}'")
         input('Press Enter to continue...:')
 
